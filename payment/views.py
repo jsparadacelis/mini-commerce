@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import PayForm
-import json
+import json, requests
 
 def pay_products(request):
     if request.method == "POST":
@@ -16,15 +16,39 @@ def pay_products(request):
                 }
                 cost += data["value_product"]
                 arr_items.append(product)
-        purchase_item = json.dumps(arr_items, ensure_ascii=False)
+        
         data_request = {
                 "cost" : cost,
-                "purchase_details_url" : "http://127.0.0.1:8000/content/1",
-                "voucher_url" : "http://127.0.0.1:8000/content/1",
-                
+                "purchase_details_url" : "https://mini-commerce-app.herokuapp.com/content/1",
+                "voucher_url" : "https://mini-commerce-app.herokuapp.com/content/1",
+                "idempotency_token":"ea0c78c5-e85a-48c4-b7f9-123456787845",
+                "order_id":"348820",
+                "terminal_id":"sede_45",
+                "purchase_description":"Compra en Tienda X",
+                "purchase_items": arr_items,
+                "user_ip_address":"61.1.224.56",
+                "expires_at":"2018-12-05T20:10:57.549653+00:00"
         }
 
-        return render(request,'products/generic.html')
+        data_request = json.dumps(data_request, ensure_ascii=False)
+        headers = {
+                'Authorization': 'Basic bWluaWFwcC1nYXRvMzptaW5pYXBwbWEtMTIz',
+                'Cache-Control': 'no-cache',
+                'Content-Type':'application/json'
+        }
+        url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/create'
+        r = requests.post(url, data = data_request, headers = headers)
+        print(r.json()["tpaga_payment_url"])
+        
+
+
+        return render(
+                request,
+                'products/generic.html',
+                {
+                        "url_pago": r.json()["tpaga_payment_url"]
+                }
+                )
 
 def content(request):
         return render(request,'products/elements.html')
