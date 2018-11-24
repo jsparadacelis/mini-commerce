@@ -1,0 +1,1 @@
+web: gunicorn mini_commerce.wsgi --log-file -
