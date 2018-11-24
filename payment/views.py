@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import PayForm
-import json, requests
+import json, requests, secrets
 
 def pay_products(request):
     if request.method == "POST":
@@ -21,7 +21,7 @@ def pay_products(request):
                 "cost" : cost,
                 "purchase_details_url" : "https://mini-commerce-app.herokuapp.com/content/1",
                 "voucher_url" : "https://mini-commerce-app.herokuapp.com/content/1",
-                "idempotency_token":"ea0c78c5-e85a-48c4-b7f9-123456787845",
+                "idempotency_token": secrets.token_hex(16),
                 "order_id":"348820",
                 "terminal_id":"sede_45",
                 "purchase_description":"Compra en Tienda X",
@@ -37,16 +37,14 @@ def pay_products(request):
                 'Content-Type':'application/json'
         }
         url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/create'
-        r = requests.post(url, data = data_request, headers = headers)
-        print(r.json()["tpaga_payment_url"])
-        
-
+        r = requests.post(url, data = data_request, headers = headers)        
+        response = r.json()
 
         return render(
                 request,
                 'products/generic.html',
                 {
-                        "url_pago": r.json()["tpaga_payment_url"]
+                        "url_pago": response["tpaga_payment_url"]
                 }
                 )
 
