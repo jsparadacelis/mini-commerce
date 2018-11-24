@@ -72,11 +72,20 @@
 						</span>
 						<a>
 							<h2>{{product.name}}</h2>
+							<h3>${{product.value}}</h3>
 							<div class="content">
 								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-								<button id="btn-p1">+</button>
+								<button class="btn_set_cant">+</button>
 							</div>
+							<form action="{% url 'pay_products' %}" method="post">
+								{% csrf_token %}
+								<input type="hidden" name="name_product" value="{{product.name}}">
+								<input type="hidden" name="value_product" value="{{product.value}}">
+								<input type="hidden" name="cant_product">
+								<button>Submit</button>
+							</form>
 						</a>
+
 					</article>
 					{% endfor %}
 				</section>
@@ -128,7 +137,7 @@
 	</div>
 
 	<!-- Scripts -->
-
+	{% load static %}
 	<script src="{% static 'js/jquery.min.js' %}"></script>
 	<script src="{% static 'js/browser.min.js' %}"></script>
 	<script src="{% static 'js/breakpoints.min.js' %}"></script>

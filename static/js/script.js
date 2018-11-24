@@ -1,9 +1,9 @@
 let num_products = 0;
 
-$("#btn-p1").click(
+$(".btn_set_cant").click(
     function(){
         num_products++;
-        $("input[name=num]").val(num_products);
+        $("input[name = cant_product]").val(num_products);  
     }
 );
 

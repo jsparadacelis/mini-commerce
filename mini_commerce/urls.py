@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from products.views import list_products
-from payment.views import pay_products
+from payment.views import pay_products, content
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", list_products, name=""),
-    path("pay_products/", pay_products, name="pay_products")
+    path("pay_products/", pay_products, name="pay_products"),
+    path("content/1", content, name="")
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

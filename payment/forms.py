@@ -1,4 +1,6 @@
 from django import forms
 
 class PayForm(forms.Form):
-    num_products = forms.CharField(max_length=2, required=False)
+    name_product = forms.CharField(max_length=100)
+    value_product = forms.IntegerField()
+    cant_product = forms.CharField(max_length=2)
