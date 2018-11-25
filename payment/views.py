@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .forms import DetailForm
 import json, requests, secrets
 from .models import Order 
-from products.models import Product, Item
+from products.models import Product
 
 def pay_products(request):
         if request.method == "POST":
@@ -20,35 +20,62 @@ def pay_products(request):
 
                         total_amount = data["value_product"] * int(data["cant_product"])
 
-                        product = Product.objects.get(
-                                name = data["name_product"]
-                        )
 
-                        order = Order.objects.create(
-                                terminal_id = "calle_13", 
-                                total_amount = total_amount
-                        )
-
-                        item = Item.objects.create(
-                                product = product,
-                                order = order,
-                                cant = int(data["cant_product"]),
-                                total_amount = data["value_product"]
-                        )
-
-
-                        mr = make_request(
+                        """ mr = make_request(
                                 total_amount,
                                 arr_items,
-                                str(order.id),
-                                order.terminal_id
-                        )
+                                secrets.token_hex(6),
+                                "calle_13"
+                        ) """
                         
+                        mr = {
+                                "miniapp_user_token": "null",
+                                "cost": "12000.0",
+                                "purchase_details_url": "https://example.com/compra/348820",
+                                "voucher_url": "https://example.com/comprobante/348820",
+                                "idempotency_token": "ea0c78c5-e85a-48c4-b7f9-24a9014a2339",
+                                "order_id": "348820",
+                                "terminal_id": "sede_45",
+                                "purchase_description": "Compra en Tienda X",
+                                "purchase_items": [
+                                        {
+                                        "name": "Aceite de girasol",
+                                        "value": 13390
+                                        },
+                                        {
+                                        "name": "Arroz X 80g",
+                                        "value": 4190
+                                        }
+                                ],
+                                "user_ip_address": "61.1.224.56",
+                                "merchant_user_id": "null",
+                                "token": "pr-39394abaed1d3e97d1fe67423079c36336905671bb5a77877e3b9dc032a3070c52162365",
+                                "tpaga_payment_url": "https://w.tpaga.co/eyJtIjp7Im8iOiJQUiJ9LCJkIjp7InMiOiJtaW5pbWFsLW1hIiwicHJ0IjoicHItMzkzOTRhYmFlZDFkM2U5N2QxZmU2NzQyMzA3OWMzNjMzNjkwNTY3MWJiNWE3Nzg3N2UzYjlkYzAzMmEzMDcwYzUyMTYyMzY1In19",
+                                "status": "created",
+                                "expires_at": "2018-11-05T15:10:57.549-05:00",
+                                "cancelled_at": "null",
+                                "checked_by_merchant_at": "null",
+                                "delivery_notification_at": "null"
+                        }
+
+
+                        print(mr)
+
+                        order = Order.objects.create(
+                                terminal_id = mr["terminal_id"], 
+                                total_amount = float(mr["cost"]),
+                                order_token = mr["order_id"],
+                                items = mr["purchase_items"],
+                                status = mr["status"]
+                        ) 
 
         
         return render(
                 request,
                 'products/generic.html',
+                {
+                        "pay_url":mr["tpaga_payment_url"]
+                }
         )
 
 def detail_products(request):
