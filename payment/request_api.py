@@ -55,10 +55,10 @@ class Request_api:
     def revert_pay(self, token):
 
         url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/refund'
-            data = { "payment_request_token" : token}
-            data_request = json.dumps(data, ensure_ascii = False)
-            r = requests.post(url, data = data_request, headers = self.headers)        
-            response = r.json()
+        data = { "payment_request_token" : token}
+        data_request = json.dumps(data, ensure_ascii = False)
+        r = requests.post(url, data = data_request, headers = self.headers)        
+        response = r.json()
 
         response = {
                 "miniapp_user_token": "null",
