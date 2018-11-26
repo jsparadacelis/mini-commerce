@@ -35,9 +35,13 @@ def pay_products(request):
                 expired_date = add_months(datetime.datetime.now(), 1)
                 
                 make_request = Request_api()
-                ip_addr = request.META["REMOTE_ADDR"]
+                ip_addr = str(request.META.get("REMOTE_ADDR"))
+                print(ip_addr)
                 response = make_request.make_pay_request(total_amount, arr_items, str(secrets.token_hex(6)), expired_date,  'sede_45', ip_addr)
                 data_order_request = response
+
+                print(response)
+
                 pay_link = response["tpaga_payment_url"]
                 print(data_order_request)
                 order = Order.objects.create(

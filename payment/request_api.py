@@ -1,4 +1,4 @@
-import requests, secrets
+import requests, secrets, json
 
 class Request_api:
 
@@ -11,9 +11,9 @@ class Request_api:
 
     
     
-    def make_pay_request(self, total_amount, arr_items, order_id, expired_date, terminal_id, id_addr):
+    def make_pay_request(self, total_amount, arr_items, order_id, expired_date, terminal_id, ip_addr):
         data_request = {
-                "cost" : total_amount,
+                "cost" : int(total_amount),
                 "purchase_details_url" : "https://mini-commerce-app.herokuapp.com/confirm_pay/"+order_id,
                 "voucher_url" : "https://mini-commerce-app.herokuapp.com/order_by/1",
                 "idempotency_token": secrets.token_hex(16),
