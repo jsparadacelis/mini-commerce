@@ -6,5 +6,11 @@ class Order(models.Model):
     total_amount = models.FloatField()
     order_token = models.CharField(max_length=20)
     date_order = models.DateField(auto_now=True)
-    items = models.TextField(max_length=300)
     status = models.CharField(max_length=10)
+    token_response = models.CharField(max_length=100)
+
+class Item(models.Model):
+
+    name = models.TextField(max_length = 20)
+    value = models.FloatField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
