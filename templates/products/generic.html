@@ -20,33 +20,25 @@
 	<!-- Wrapper -->
 	<div id="wrapper">
 
-		<!-- Header -->
 		<header id="header">
 			<div class="inner">
 
 				<!-- Logo -->
 				<a href="index.html" class="logo">
-					<span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">Phantom</span>
+					<span class="symbol"><img src="{% static 'images/logo.svg' %}" alt="" /></span><span class="title">Phantom</span>
 				</a>
 			</div>
 		</header>
 
-		<!-- Menu -->
-		<nav id="menu">
-			<h2>Menu</h2>
-			<ul>
-				<li><a href="index.html">Home</a></li>
-				<li><a href="generic.html">Ipsum veroeros</a></li>
-				<li><a href="generic.html">Tempus etiam</a></li>
-				<li><a href="generic.html">Consequat dolor</a></li>
-				<li><a href="elements.html">Elements</a></li>
-			</ul>
-		</nav>
 
 		<!-- Main -->
 		<div id="main">
 			<div class="inner">
-				<h1>Detalle de Pago</h1>
+				<h1>Detalle de Compra</h1>
+				<p><b>ID : </b> {{data_order.order_id}}</p>
+				<p><b>Expira en : </b>{{date_order}}</p>
+				<p><b>Comentarios : </b>{{data_order.purchase_description}}</p>
+				<p><b>Estado : </b>{{data_order.status}}</p>
 				<div class="table-wrapper">
 					<table class="alt">
 						<thead>
@@ -54,36 +46,34 @@
 								<th>Cantidad</th>
 								<th>Nombre</th>
 								<th>Precio unitario</th>
-								<th>Total</th>
+								<th>Imagen</th>
+
 							</tr>
 						</thead>
 						<tbody>
-
+							{% for data in data_list %}
 							<tr>
-								<td>{{data.cant_product}}</td>
-								<td>{{data.name_product}}</td>
-								<td>{{data.value_product}}</td>
-								<td>{{total}}</td>
+								<td>{{data.quantity}}</td>
+								<td>{{data.name}}</td>
+								<td>{{data.value}}</td>
+								<td>
+									<img src="{{data.url}}" alt="{{data.name}}" style="width: 15%;">
+								</td>
 							</tr>
-
+							{% endfor %}
 
 						</tbody>
 					</table>
-					<form action="{% url 'pay_products' %}" method="post">
-						{% csrf_token %}
-						<input type="text" name="terminal">
-						<input type="hidden" name="name_product" value="{{data.name_product}}">
-						<input type="hidden" name="value_product" value="{{data.value_product}}">
-						<input type="hidden" name="cant_product" value="{{data.cant_product}}">
-						<button type="submit">Enviar</button>
-					</form>
 
 				</div>
-				<h1><a href="{{pay_url}}">link</a></h1>
 			</div>
 		</div>
-		
-		<!-- Footer -->
+		<div class="btn-make-pay">
+			<img src="{% static 'images/tpaga_wallet_logo.png' %}" alt="{{data.name}}" style="width: 15%;">
+			<h3><a href="{{pay_link}}">Link de pago</a></h3>
+		</div>
+
+		<!-- 
 		<footer id="footer">
 			<div class="inner">
 				<section>
@@ -123,7 +113,7 @@
 					<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 				</ul>
 			</div>
-		</footer>
+		</footer> -->
 
 	</div>
 

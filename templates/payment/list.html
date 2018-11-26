@@ -7,9 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>{{order.date_order}}</h1>
-    {% for item in list_trans %}
-        <h1>{{item.items}}</h1>
+    {% for order in list_order %}
+        {{order.id}}
+        {{order.status}}
+        {{order.total_amount}}
     {% endfor %}
 </body>
 </html>

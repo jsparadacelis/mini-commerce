@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+{% load static %}
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Phantom by HTML5 UP</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+</head>
+
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="{% static 'images/logo.svg' %}" alt="" /></span><span class="title">Phantom</span>
+                </a>
+            </div>
+        </header>
+
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                {% if data_list %}
+                <header>
+                    <h1>Descripción del Pago</h1>
+                    <p><b>ID : </b> {{order_data.order_token}}</p>
+                    <p><b>Fecha de creación : </b> {{order_data.date_order}}</p>
+                    <p><b>Estado : </b>{{order_data.status}}</p>
+                </header>
+
+                <div class="table-wrapper">
+                    <table class="alt">
+                        <thead>
+                            <tr>
+                                <th>Cantidad</th>
+                                <th>Nombre</th>
+                                <th>Precio unitario</th>
+                                <th>Imagen</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in data_list %}
+                            <tr>
+                                <td>{{data.quantity}}</td>
+                                <td>{{data.name}}</td>
+                                <td>{{data.value}}</td>
+                                <td>
+                                    <img src="{{data.url}}" alt="{{data.name}}" style="width: 15%;">
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+                {% else %}
+                <h1>ERROR</h1>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% if order_data.status != "delivered" %}
+    <div class="btn-make-pay">
+        <img src="{% static 'images/delivery.svg' %}" alt="{{data.name}}" style="width: 15%;">
+        <h3><a href="/confirm_delivery/{{order_data.order_token}}">Confirmar Entrega</a></h3>
+    </div>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+</body>
+
+</html>
