@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 
 from .models import Client
 
@@ -22,6 +22,9 @@ def login_view(request):
         elif user :
             login(request, user)
             return redirect("list_products")
+        else:
+            messages.error(request,'usuario o contraseña incorrecta')
+            return redirect('login_view')
     else:
         return render(request, 'users/login.html')
 
