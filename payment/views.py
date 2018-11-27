@@ -7,12 +7,15 @@ from .request_api import Request_api
 from .expired_date import add_months
 import datetime
 import dateutil.parser
+from django.contrib.auth.decorators import login_required
+
 
 from django.http import HttpResponse
 
 import itertools
 from operator import itemgetter
 
+@login_required
 def pay_products(request):
         
         arr_items = []
@@ -49,7 +52,8 @@ def pay_products(request):
                         total_amount = float(response["cost"]),
                         order_token = response["order_id"],
                         status = response["status"],
-                        token_response = response["token"]
+                        token_response = response["token"],
+                        user = request.user.client
                 ) 
                 for item in arr_items:
                         Item.objects.create(
@@ -86,6 +90,7 @@ def pay_products(request):
                 }
         )
 
+@login_required
 def detail_products(request):
     if request.method == "POST":
         form = DetailForm(request.POST)
@@ -120,6 +125,7 @@ def order_by(request, id):
                 }
         )
 
+@login_required
 def confirm_pay(request, order_token):
        
         order = Order.objects.get(order_token = order_token)
@@ -165,6 +171,7 @@ def confirm_pay(request, order_token):
                 }
         )
 
+@login_required
 def confirm_delivery(request, order_token):
         order = Order.objects.get(order_token = order_token)
         request_status = Request_api()
@@ -177,11 +184,32 @@ def confirm_delivery(request, order_token):
         url = "/confirm_pay/"+order_token
         return redirect(url)
 
+
+@login_required
 def list_trans(request):
 
+        list_order = {}
+        if request.method == 'POST':
+                order = Order.objects.get(id = request.POST["order_id"])
+                request_status = Request_api()
+                response = request_status.revert_pay(order.token_response)
+                order.status = response["status"]
+                order.save()
+        else:
+                if request.user.is_staff:
+                        list_order = Order.objects.all().order_by('id')
+                else:
+                        list_order = Order.objects.filter(
+                                user = request.user.client
+                                ).order_by('id')
+
         
-        list_order = Order.objects.all()
         return render(
                 request,
-                'payment/list.html'
-        )
+                'payment/list.html',
+                {
+                        "list_order" : list_order
+                }
+        )  
+        
+        

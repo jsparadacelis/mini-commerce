@@ -80,6 +80,17 @@ input, select, textarea {
 	display: block;
     text-align: center;
 }
+.container-form{
+	display: flex;
+    justify-content: center;
+}
+.login-form{
+	text-align: center;
+	margin-top: 10%;
+}
+.login-form form button{
+	margin-top: 10px;
+}
 /* Basic */
 
 	@-ms-viewport {

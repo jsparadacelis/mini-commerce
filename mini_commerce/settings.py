@@ -26,7 +26,7 @@ SECRET_KEY = 'ppb1#h=k-qnw_zwf8&e=r0wfv002m0n0iwqqgtyyu0d9&akiql'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
     #Apps 
     'products',
-    'payment'
+    'payment',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -84,8 +85,8 @@ WSGI_APPLICATION = 'mini_commerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mini_commerce',
-        'USER': 'admin',
+        'NAME': 'commerce_db',
+        'USER': 'admin_co',
         'PASSWORD': 'admin123',
         'HOST': 'localhost',
         'PORT': '',
