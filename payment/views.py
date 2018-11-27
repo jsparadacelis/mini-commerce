@@ -121,7 +121,7 @@ def order_by(request, id):
         )
 
 def confirm_pay(request, order_token):
-        print()
+       
         order = Order.objects.get(order_token = order_token)
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
@@ -160,7 +160,8 @@ def confirm_pay(request, order_token):
                 'payment/confirm.html',
                 {
                         "data_list" : data_list,
-                        "order_data" : order
+                        "order_data" : order,
+                        "response" : response
                 }
         )
 
