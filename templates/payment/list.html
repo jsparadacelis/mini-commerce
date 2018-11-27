@@ -1,90 +1,51 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block body_content %}
+
 {% load static %}
-<html lang="en">
 
-<head>
-    <title>Phantom by HTML5 UP</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-    <noscript>
-        <link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
-</head>
+{% if list_order %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Fecha de creación</th>
 
-
-<body class="is-preload">
-    <!-- Wrapper -->
-    <div id="wrapper">
-
-        <header id="header">
-            <div class="inner">
-
-                <!-- Logo -->
-                <a href="index.html" class="logo">
-                    <span class="symbol"><img src="{% static 'images/logo.svg' %}" alt="" /></span><span class="title">Phantom</span>
-                </a>
-            </div>
-        </header>
-
-
-        <!-- Main -->
-        <div id="main">
-            <div class="inner">
-                {% if list_order %}
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Fecha de creación</th>
-                                
-                                {% if request.user.is_staff %}
-                                <th>Usuario</th>
-                                <th>Token de seguridad</th>
-                                {% endif %}
-                               
-                               
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in list_order %}
-                            <tr>
-                                <td>{{order.id}}</td>
-                                <td>{{order.status}}</td>
-                                <td>{{order.total_amount}}</td>
-                                <td>{{order.date_order}}</td>
-                                {% if request.user.is_staff %}
-                                <td>{{order.user.user.username}}</td>
-                                <td>{{order.order_token}}</td>
-                                <td>
-                                    <form action="{% url 'list_trans' %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="{{order.id}}" name="order_id">
-                                        <button type="submit" class="button primary">revertir</button>
-                                    </form>
-                                </td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                {% if request.user.is_staff %}
+                <th>Usuario</th>
+                <th>Token de seguridad</th>
                 {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/browser.min.js' %}"></script>
-    <script src="{% static 'js/breakpoints.min.js' %}"></script>
-    <script src="{% static 'js/util.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
 
 
-</body>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in list_order %}
+            <tr>
+                <td>{{order.id}}</td>
+                <td>{{order.status}}</td>
+                <td>{{order.total_amount}}</td>
+                <td>{{order.date_order}}</td>
+                {% if request.user.is_staff %}
+                <td>{{order.user.user.username}}</td>
+                <td>{{order.order_token}}</td>
+                <td>
+                    <form action="{% url 'list_trans' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{order.id}}" name="order_id">
+                        <button type="submit" class="button primary">revertir</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
 
-</html>
+
+{% endblock %}

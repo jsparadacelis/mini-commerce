@@ -86,10 +86,9 @@ input, select, textarea {
 }
 .login-form{
 	text-align: center;
-	margin-top: 10%;
 }
 .login-form form button{
-	margin-top: 10px;
+	margin-top: 20px;
 }
 /* Basic */
 
