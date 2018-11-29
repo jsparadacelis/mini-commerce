@@ -58,7 +58,7 @@
             </table>
         </div>
         <span class="current">
-            Pagina {{ list_order.number }} de {{ list_order.paginator.num_pages }}
+            Página {{ list_order.number }} de {{ list_order.paginator.num_pages }}
         </span>
         {% if list_order.has_next %}
         <a href="?page={{ list_order.next_page_number }}">siguiente</a>
