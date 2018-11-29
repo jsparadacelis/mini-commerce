@@ -40,21 +40,25 @@ def sign_up(request):
     if request.method == 'POST':
 
         data = request.POST
-        user = User.objects.create_user(
-            data["username"],
-            data["mail"],
-            data["password"]
-        )
-        user.save()
 
+        user_taken = User.objects.filter(username = data["username"] ).exists()
+        if user_taken :
+            messages.error(request,'el nombre de usuario ya existe')
+            return redirect('sign_up')
+        else:
+            user = User.objects.create_user(
+                data["username"],
+                data["mail"],
+                data["password"]
+            )
+            user.save()
+            client = Client.objects.create(user = user, terminal = data["terminal_id"])
+            client.save()
 
-        client = Client.objects.create(user = user, terminal = data["terminal_id"])
-        client.save()
-
-        user_created = authenticate(request, username=data["username"], password=data["password"])
-        if user_created :
-            login(request, user_created)
-            return redirect("list_products")
+            user_created = authenticate(request, username=data["username"], password=data["password"])
+            if user_created :
+                login(request, user_created)
+                return redirect("list_products")
 
     else:
         return render(request, 'users/login.html', {"sign_up":"true"})
