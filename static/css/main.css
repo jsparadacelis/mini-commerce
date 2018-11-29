@@ -75,10 +75,14 @@ input, select, textarea {
 .btn-send-request{
 	display: flex;
 	justify-content: center;
+	margin: 2.5em;
 }
 .btn-make-pay{
 	display: block;
     text-align: center;
+}
+.btn-make-pay img{
+	width: 40% !important;
 }
 .container-form{
 	display: flex;
@@ -90,6 +94,20 @@ input, select, textarea {
 .login-form form button{
 	margin-top: 20px;
 }
+
+.list-products{
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15%;
+}
+
+.list-products input[type="number"]{
+	border: 1px #ccc solid;
+	border-radius: 5px;
+	width: 70px;
+}
+
+
 /* Basic */
 
 	@-ms-viewport {
@@ -181,7 +199,7 @@ input, select, textarea {
 	}
 
 	p {
-		margin: 0 0 2em 0;
+		margin: 0 0 0.5em 0;
 	}
 
 	h1 {
@@ -216,7 +234,7 @@ input, select, textarea {
 	h2, h3, h4, h5, h6 {
 		font-weight: 900;
 		line-height: 1.5;
-		margin: 0 0 2em 0;
+		margin: 0 0 0.5em 0;
 		text-transform: uppercase;
 		letter-spacing: 0.35em;
 	}
@@ -2312,11 +2330,13 @@ input, select, textarea {
 		border: 0;
 		display: inline-block;
 		position: relative;
+		margin-right: 10%;
 	}
 
 		.image img {
 			border-radius: 4px;
 			display: block;
+			width: 90px;
 		}
 
 		.image.left, .image.right {
@@ -2945,7 +2965,7 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			#header {
-				padding: 4em 0 0.1em 0 ;
+				padding: 4em 0 0.1em 1.5em ;
 			}
 
 				#header nav {
@@ -3154,7 +3174,7 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			#main {
-				padding: 0em 0 4em 0 ;
+				padding: 0em 0 1.5em 0 ;
 			}
 
 		}

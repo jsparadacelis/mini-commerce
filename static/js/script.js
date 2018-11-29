@@ -1,16 +1,31 @@
-let num_products = 0;
-let list_products = []
-$(document).ready(function() {
-    $('.btn').on('click', function (e) {
-        let id = $(this).data("value");  
-        let item = [
-             $( "input[name=name_product"+id+"]" ).val(),
-             $( "input[name=value_product"+id+"]" ).val()
-        ]
-        list_products.push(item)
-        $( "input[name=data]" ).val(list_products)
-    });  
+jQuery('.quantity').each(function () {
+    var spinner = jQuery(this),
+        input = spinner.find('input[type="number"]'),
+        btnUp = spinner.find('.quantity-up'),
+        btnDown = spinner.find('.quantity-down'),
+        min = input.attr('min'),
+        max = input.attr('max');
 
+    btnUp.click(function () {
+        var oldValue = parseFloat(input.val());
+        if (oldValue >= max) {
+            var newVal = oldValue;
+        } else {
+            var newVal = oldValue + 1;
+        }
+        spinner.find("input").val(newVal);
+        spinner.find("input").trigger("change");
+    });
+
+    btnDown.click(function () {
+        var oldValue = parseFloat(input.val());
+        if (oldValue <= min) {
+            var newVal = oldValue;
+        } else {
+            var newVal = oldValue - 1;
+        }
+        spinner.find("input").val(newVal);
+        spinner.find("input").trigger("change");
+    });
 
 });
-

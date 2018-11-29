@@ -27,8 +27,10 @@
         </header>
 
         <nav id="menu">
+            <h3>Menu</h3>
+            <p><b>{{request.user.username}}</b></p>
             <ul>
-
+                <li><a href="{% url 'list_products' %}">Nueva orden</a></li>
                 <li><a href="{% url 'list_trans' %}">Tus transacciones</a></li>
                 <li><a href="{% url 'log_out' %}">Cerrar sesión</a></li>
             </ul>

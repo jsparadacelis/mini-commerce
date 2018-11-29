@@ -3,52 +3,59 @@
 {% block body_content %}
 
 {% load static %}
-	<div id="wrapper">
+<div id="wrapper">
 
-		<!-- Main -->
-		<div id="main">
-			<div class="inner">
-				<header>
-					<h1>This is Phantom, a free, fully responsive site<br />
-						template designed by <a href="http://html5up.net">HTML5 UP</a>.</h1>
-					<p>Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod sed cursus arcu
-						elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna feugiat veroeros aliquam. Lorem ipsum dolor
-						sit amet nullam dolore.</p>
-				</header>
-				<section class="tiles">
+	<!-- Main -->
+	<div id="main">
+		<div class="inner">
+			<header>
+				<h1>Hola! Bienvenido a Phantom Movie Commerce
+					<h1 />
+			</header>
+			<section class="">
+				<form action="{% url 'pay_products' %}" method="POST" id="myform">
 					{% for product in products_list %}
-					<article class="style1">
+					<article class="list-products">
 						<span class="image">
 							<img src="{{product.image.url}}" alt="" />
 						</span>
-						<a>
+						<span>
 							<h2>{{product.name}}</h2>
 							<h3>${{product.value}}</h3>
 							<div class="content">
-								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-								<button class="btn" data-value="{{product.id}}">Añadir</button>
+								<p>Cantidad: </p>
 							</div>
+
+							{% csrf_token %}
 							<input type="hidden" name="name_product{{product.id}}" value="{{product.name}}">
 							<input type="hidden" name="value_product{{product.id}}" value="{{product.value}}">
-							<input type="text" name="cant_product{{product.id}}">
-						</a>
+							<input type="number" name="cant_product{{product.id}}" min="0" max="100" step="1" value="0" required>
+						</span>
+
+
 					</article>
 					{% endfor %}
-				</section>
+					<div class="btn-send-request">
+						<input type="hidden" name="num_products" value="{{num}}">
+						<button class="button primary" form="myform">Comprar</button>
+					</div>
+
+				</form>
+
+			</section>
 
 
-			</div>
 
 
 		</div>
-		<div class="btn-send-request">
-			<form action="{% url 'pay_products' %}" method="POST">
-				{% csrf_token %}
-				<input type="hidden" name="data">
-				<button class="button primary">Comprar</button>
-			</form>
-		</div>
+
 
 	</div>
+
+
+</div>
+
+
+
 
 {% endblock %}

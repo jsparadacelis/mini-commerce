@@ -5,48 +5,66 @@
 {% load static %}
 
 {% if list_order %}
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Fecha de creación</th>
+<div class="pagination">
+    <span class="step-links">
+        {% if list_order.has_previous %}
+        <a href="?page=1">&laquo; primero</a>
+        <a href="?page={{ list_order.previous_page_number }}"> | previo</a>
+        {% endif %}
 
-                {% if request.user.is_staff %}
-                <th>Usuario</th>
-                <th>Token de seguridad</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in list_order %}
-            <tr>
-                <td>{{order.id}}</td>
-                <td>{{order.status}}</td>
-                <td>{{order.total_amount}}</td>
-                <td>{{order.date_order}}</td>
-                {% if request.user.is_staff %}
-                <td>{{order.user.user.username}}</td>
-                <td>{{order.order_token}}</td>
-                <td>
-                    <form action="{% url 'list_trans' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{order.id}}" name="order_id">
-                        <button type="submit" class="button primary">revertir</button>
-                    </form>
-                </td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No. de Orden</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Fecha de creación</th>
+                        <th>Token de seguridad</th>
+                        {% if request.user.is_staff %}
+                        <th>Usuario</th>
+                        
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in list_order %}
+                    <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.status}}</td>
+                        <td>{{order.total_amount}}</td>
+                        <td>{{order.date_order}}</td>
+                        <td><a href="/voucher/{{order.order_token}}">{{order.order_token}}</a></td>
+                        {% if request.user.is_staff %}
+                        <td>{{order.user.user.username}}</td>
+                        
+                        <td>
+                            <form action="{% url 'list_trans' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{order.id}}" name="order_id">
+                                <button type="submit" class="button primary">revertir</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <span class="current">
+            Pagina {{ list_order.number }} de {{ list_order.paginator.num_pages }}
+        </span>
+        {% if list_order.has_next %}
+        <a href="?page={{ list_order.next_page_number }}">siguiente</a>
+        <a href="?page={{ list_order.paginator.num_pages }}"> | ultimo &raquo;</a>
+        {% endif %}
+    </span>
 </div>
+
 {% else %}
 <div class="container container-form">
     <div class="col-md-4 login-form">
-       <h1>Aún no has realizado ordenes</h1>
+        <h1>Aún no has realizado ordenes</h1>
         <a href="{% url 'list_products' %}">Nueva orden</a>
 
     </div>
