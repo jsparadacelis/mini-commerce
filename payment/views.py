@@ -213,7 +213,7 @@ def list_trans(request):
                 response = request_status.revert_pay(order.token_response)
                 order.status = response["status"]
                 order.save()
-                messages.succes(request,'transacción revertida')
+                messages.success(request,'transacción revertida')
                 return redirect('list_trans')
         else:
                 #Listing transactions for admin (all)
