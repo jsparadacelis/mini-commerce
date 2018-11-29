@@ -1,9 +1,14 @@
+#Django utilities
 from django.shortcuts import render
-from .models import Product
 from django.contrib.auth.decorators import login_required
+
+#Local files utilities
+from .models import Product
 
 @login_required
 def list_products(request):
+
+    #Query for all products
     products_list = Product.objects.all()
     cant_products = Product.objects.count()
     return render(
