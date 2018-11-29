@@ -12,6 +12,12 @@
         <a href="?page={{ list_order.previous_page_number }}"> | previo</a>
         {% endif %}
 
+        {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -23,7 +29,7 @@
                         <th>Token de seguridad</th>
                         {% if request.user.is_staff %}
                         <th>Usuario</th>
-                        
+
                         {% endif %}
                     </tr>
                 </thead>
@@ -37,7 +43,7 @@
                         <td><a href="/voucher/{{order.order_token}}">{{order.order_token}}</a></td>
                         {% if request.user.is_staff %}
                         <td>{{order.user.user.username}}</td>
-                        
+
                         <td>
                             <form action="{% url 'list_trans' %}" method="post">
                                 {% csrf_token %}

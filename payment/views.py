@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 #Python utilities
 import json, requests, secrets
@@ -211,6 +213,8 @@ def list_trans(request):
                 response = request_status.revert_pay(order.token_response)
                 order.status = response["status"]
                 order.save()
+                messages.succes(request,'transacción revertida')
+                return redirect('list_trans')
         else:
                 #Listing transactions for admin (all)
                 if request.user.is_staff:
@@ -219,11 +223,12 @@ def list_trans(request):
                         list_order = Order.objects.filter(
                                 user = request.user.client
                                 ).order_by('id')
+                
+                #Pagination
+                paginator = Paginator(list_order, 5)
+                page = request.GET.get('page')
+                list_order = paginator.get_page(page)
 
-        #Pagination
-        paginator = Paginator(list_order, 5)
-        page = request.GET.get('page')
-        list_order = paginator.get_page(page)
         return render(
                 request,
                 'payment/list.html',
