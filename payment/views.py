@@ -1,19 +1,24 @@
+#Django utilities
 from django.shortcuts import render, redirect
-from .forms import DetailForm
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
+#Python utilities
 import json, requests, secrets
+import datetime
+import dateutil.parser
+import itertools
+from operator import itemgetter
+
+#Local files utilities
 from .models import Order, Item 
 from products.models import Product
 from .request_api import Request_api
 from .expired_date import add_months
-import datetime
-import dateutil.parser
-from django.contrib.auth.decorators import login_required
 
 
-from django.http import HttpResponse
-
-import itertools
-from operator import itemgetter
 
 @login_required
 def pay_products(request):
@@ -22,31 +27,33 @@ def pay_products(request):
         pay_link = ""
         data_order_request = {}
         if request.method == "POST":
-                list_products = request.POST
+
+                num_products = int(request.POST["num_products"])
+                data = request.POST
                 total_amount = 0
-                list_item = list_products["data"].split(",")
-                
-                for i in range(int(len(list_item)/2)):
-                        product = {
-                                "name" : list_item.pop(0),
-                                "value" : float(list_item.pop(0))
-                        }
-                        total_amount += product["value"]
-                        arr_items.append(product)
+
+                #Make purchase items array
+                for i in range(num_products):
+                        num = int(data["cant_product"+str(i + 1)])
+                        for j in range(num):
+                                product = {
+                                        "name" : data["name_product"+str(i + 1)],
+                                        "value" : float(data["value_product"+str(i + 1)])
+                                }
+                                total_amount += product["value"]
+                                arr_items.append(product)
                 
 
                 expired_date = add_months(datetime.datetime.now(), 1)
                 
                 make_request = Request_api()
                 ip_addr = str(request.META.get("REMOTE_ADDR"))
-                print(ip_addr)
+                #Make request to TPAGA api
                 response = make_request.make_pay_request(total_amount, arr_items, str(secrets.token_hex(6)), expired_date,  'sede_45', ip_addr)
                 data_order_request = response
 
-                print(response)
 
                 pay_link = response["tpaga_payment_url"]
-                print(data_order_request)
                 order = Order.objects.create(
                         terminal_id = response["terminal_id"], 
                         total_amount = float(response["cost"]),
@@ -54,7 +61,9 @@ def pay_products(request):
                         status = response["status"],
                         token_response = response["token"],
                         user = request.user.client
-                ) 
+                )
+                order.save()
+
                 for item in arr_items:
                         Item.objects.create(
                                 name = item["name"],
@@ -66,7 +75,50 @@ def pay_products(request):
 
 
         data_list = []
+
+        #Ordering item's info for render
         arr_items = sorted(arr_items, key = itemgetter('name'))
+        for key, group in itertools.groupby(arr_items, key = lambda x : x['name']):
+                l = list(group)
+                d = l[0]
+                data = {
+                        "name" : key,
+                        "quantity" : len(l),
+                        "value" : d["value"]
+                }
+                data_list.append(data)
+        
+        #Getting expires_at date and formating
+        date = dateutil.parser.parse(data_order_request['expires_at']).strftime("%d/%m/%y")
+        return render(
+                request,
+                'products/generic.html',
+                {
+                        "data_list" : data_list,
+                        "pay_link" : pay_link,
+                        "data_order": data_order_request,
+                        "date_order" : date
+                } 
+        )
+
+def voucher(request, order_token):
+
+        #getting order from order_token param 
+        order = Order.objects.get(order_token = order_token)
+        #Order's items
+        items_list = Item.objects.filter(order = order)
+        arr_items = []
+        for item in items_list:
+                product = {
+                        "name" : item.name,
+                        "value" : item.value
+                }
+                arr_items.append(product)
+
+        data_list = []
+        arr_items = sorted(arr_items, key = itemgetter('name'))
+
+        #Ordering item's info for render
         for key, group in itertools.groupby(arr_items, key = lambda x : x['name']):
                 l = list(group)
                 d = l[0]
@@ -77,51 +129,14 @@ def pay_products(request):
                         "url" : Product.objects.get(name = key).image.url
                 }
                 data_list.append(data)
-                
-        date = dateutil.parser.parse(data_order_request['expires_at']).strftime("%d/%m/%y")
-        return render(
-                request,
-                'products/generic.html',
-                {
-                        "data_list" : data_list,
-                        "pay_link" : pay_link,
-                        "data_order": data_order_request,
-                        "date_order" : date
-                }
-        )
 
-@login_required
-def detail_products(request):
-    if request.method == "POST":
-        form = DetailForm(request.POST)
-        arr_items = list()
-        data = dict()
-        total_amount = 0
-        if form.is_valid():
-            data = form.cleaned_data
-            total_amount = data["value_product"] * int(data["cant_product"])   
-       
-        
+
         return render(
                 request,
-                'products/generic.html',
-                {
-                        #"url_pago": response["tpaga_payment_url"],
-                        "data" : data,
-                        "total" : total_amount
-                }
-        )
-        
-        
-def order_by(request, id):
-        order = Order.objects.get(id=id)
-        items = Item.objects.filter(order = order)
-        return render(
-                request,
-                'payment/detail.html',
+                'products/voucher.html',
                 {
                         "order":order,
-                        "list_items":items
+                        "data_list":data_list
                 }
         )
 
@@ -187,8 +202,9 @@ def confirm_delivery(request, order_token):
 
 @login_required
 def list_trans(request):
-
+      
         list_order = {}
+        #Listing transactions for user
         if request.method == 'POST':
                 order = Order.objects.get(id = request.POST["order_id"])
                 request_status = Request_api()
@@ -196,6 +212,7 @@ def list_trans(request):
                 order.status = response["status"]
                 order.save()
         else:
+                #Listing transactions for admin (all)
                 if request.user.is_staff:
                         list_order = Order.objects.all().order_by('id')
                 else:
@@ -203,7 +220,10 @@ def list_trans(request):
                                 user = request.user.client
                                 ).order_by('id')
 
-        
+        #Pagination
+        paginator = Paginator(list_order, 5)
+        page = request.GET.get('page')
+        list_order = paginator.get_page(page)
         return render(
                 request,
                 'payment/list.html',

@@ -18,8 +18,6 @@
                 <th>Usuario</th>
                 <th>Token de seguridad</th>
                 {% endif %}
-
-
             </tr>
         </thead>
         <tbody>
@@ -45,6 +43,15 @@
         </tbody>
     </table>
 </div>
+{% else %}
+<div class="container container-form">
+    <div class="col-md-4 login-form">
+       <h1>Aún no has realizado ordenes</h1>
+        <a href="{% url 'list_products' %}">Nueva orden</a>
+
+    </div>
+</div>
+
 {% endif %}
 
 
