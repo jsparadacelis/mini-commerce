@@ -15,11 +15,11 @@ class Request_api:
         data_request = {
                 "cost" : int(total_amount),
                 "purchase_details_url" : "https://mini-commerce-app.herokuapp.com/confirm_pay/"+order_id,
-                "voucher_url" : "https://mini-commerce-app.herokuapp.com/order_by/1",
+                "voucher_url" : "https://mini-commerce-app.herokuapp.com/voucher/"+order_id,
                 "idempotency_token": secrets.token_hex(16),
                 "order_id": order_id,
                 "terminal_id":terminal_id,
-                "purchase_description":"Compra en Tienda X",
+                "purchase_description":"Compra en Tienda Phantom",
                 "purchase_items": arr_items,
                 "user_ip_address": ip_addr,
                 "expires_at": expired_date
