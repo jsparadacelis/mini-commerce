@@ -2,6 +2,7 @@ import requests, secrets, json
 
 class Request_api:
 
+    #Headers for requests to api
     def __init__(self):
         self.headers = {
                 'Authorization': 'Basic bWluaWFwcC1nYXRvMzptaW5pYXBwbWEtMTIz',
@@ -10,7 +11,7 @@ class Request_api:
         }
 
     
-    
+
     def make_pay_request(self, total_amount, arr_items, order_id, expired_date, terminal_id, ip_addr):
         data_request = {
                 "cost" : int(total_amount),
