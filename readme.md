@@ -78,9 +78,9 @@ En el tema de buenas prácticas, algo que intento aplicar siempre es hacer códi
 
 Herramienta para alojar aplicaciones, sólo conozco Heroku. Existen otras cómo AWS, Digital Ocean. Existe otra herramienta quéno he visto muy referenciada qué se llama [D2C](https://d2c.io/). Permite conectarse con AWS, Google cloud, digital ocean. Para realizar despliegues  y pruebas locales a partir de repositorios, recomiendo docker. Se consigue muy buena documentación en internet. Dentro de su hub de aplicaciones se consiguen muchas herraminetas qué hacen sencillo el poder ejecutar aplicaciones de otros en nuestras máquinas. 
 
-Para realizar pruebas con Docker,ejecutar los siguientes comandos :
-git clone https://github.com/jsparadacelis/mini-commerce.git
-cd mini-commerce
-sudo docker-compose up
-entrar a http://127.0.0.1:8000/ desde el navegador
+#### Para realizar pruebas con Docker,ejecutar los siguientes comandos :
+1. git clone https://github.com/jsparadacelis/mini-commerce.git
+2. cd mini-commerce
+3. sudo docker-compose up
+4. Entrar a http://127.0.0.1:8000/ desde el navegador
 ¡ Y listo !
