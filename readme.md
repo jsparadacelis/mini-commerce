@@ -41,4 +41,19 @@ Sobre lo positivo de la prueba, personalmente me gusto la presentación de la do
 
 - En la página principal de la documentación, muestran un diagrama con el flujo de la aplicación. El diagrama se llama "Diagrama de comunicación" y permite ver cómo se comunican los componentes del negocio en tiempo de ejecución. Personalmente le daría ese nombre, aunque igualmente cumple con el cometido de su nombre que es explicar el flujo de la aplicación. 
 
+#### Recomendaciones
+
+En lo personal, para el trabajo con Django recomiendo tres libros:
+
+- Django, la guía definitiva: Desarrolla aplicaciones Web de forma rápida y sencilla usando Django. Adrian Holovaty y Jacob Kaplan-Moss
+
+- Two Scoops of Django 1.11 Best Practices for Django. Daniel Roy Greenfeld y Audrey Roy Greenfeld
+- Django RESTful web services. Gaston Hillar
+
+Estos son los libros qué he utilizados como apoyo para desarrollar en Django. Otros materiales se pueden encontrar en [Medium](https://medium.com/). Esta es una página dónde profesionales de varias areas escriben sobre sus experiencias. Se encuentran artículos sobre desarrollo entre otras areas. 
+
+En el tema de buenas prácticas, algo que intento aplicar siempre es hacer código que se entienda, de forma qué a la hora de compartirlo con la comunidad, cualquiera pueda entenderlo. Creo que esto es lo mas valioso de filosofías cómo el software libre: qué el código sea lo mas legible. 
+
+Herramienta para alojar aplicaciones, sólo conozco Heroku. Existen otras cómo AWS, Digital Ocean. Existe otra herramienta quéno he visto muy referenciada qué se llama [D2C](https://d2c.io/). Permite conectarse con AWS, Google cloud, digital ocean. Para realizar despliegues  y pruebas locales a partir de repositorios, recomiendo docker. Se consigue muy buena documentación en internet. Dentro de su hub de aplicaciones se consiguen muchas herraminetas qué hacen sencillo el poder ejecutar aplicaciones de otros en nuestras máquinas. 
+
 
