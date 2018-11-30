@@ -72,8 +72,7 @@ def pay_products(request):
                                 value = item["value"],
                                 order = order
                         ) 
-        else:
-                pass
+        
 
 
         data_list = []
