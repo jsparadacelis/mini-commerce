@@ -44,7 +44,7 @@ def pay_products(request):
                                 }
                                 total_amount += product["value"]
                                 arr_items.append(product)
-                
+                ac992fd24a51ac992fd24a51
 
                 expired_date = add_months(datetime.datetime.now(), 1)
                 
