@@ -108,7 +108,7 @@ input, select, textarea {
 }
 .alert-reverted{
 	
-	padding: 20px;
+	padding: 10px;
 	background-color: #15e25a;
 	color: white;
 	border-radius:5px;
