@@ -13,9 +13,9 @@ def list_products(request):
     cant_products = Product.objects.count()
     return render(
         request,
-        'products/index.html',
+        'products/list_products.html',
         {
             "products_list" : products_list,
-            "num" : cant_products
+            "cant_products" : cant_products
         }
     )

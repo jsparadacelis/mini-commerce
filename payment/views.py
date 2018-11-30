@@ -91,15 +91,18 @@ def pay_products(request):
                 data_list.append(data)
         
         #Getting expires_at date and formating
-        date = dateutil.parser.parse(data_order_request['expires_at']).strftime("%d/%m/%y")
+        date_order = dateutil.parser.parse(
+                data_order_request['expires_at']
+                ).strftime("%d/%m/%y")
+                
         return render(
                 request,
-                'products/generic.html',
+                'products/pay_products.html',
                 {
                         "data_list" : data_list,
                         "pay_link" : pay_link,
                         "data_order": data_order_request,
-                        "date_order" : date
+                        "date_order" : date_order
                 } 
         )
 
@@ -176,8 +179,6 @@ def confirm_pay(request, order_token):
                 }
                 data_list.append(data)
 
-
-        print(data_list)
         return render(
                 request,
                 'payment/confirm.html',

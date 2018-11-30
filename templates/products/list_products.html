@@ -10,7 +10,7 @@
 		<div class="inner">
 			<header>
 				<h1>Hola! Bienvenido a Phantom Movie Commerce
-					<h1 />
+					</h1>
 			</header>
 			<section class="">
 				<form action="{% url 'pay_products' %}" method="POST" id="myform">
@@ -36,7 +36,7 @@
 					</article>
 					{% endfor %}
 					<div class="btn-send-request">
-						<input type="hidden" name="num_products" value="{{num}}">
+						<input type="hidden" name="num_products" value="{{list_products}}">
 						<button class="button primary" form="myform">Comprar</button>
 					</div>
 
