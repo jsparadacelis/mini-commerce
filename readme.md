@@ -3,6 +3,10 @@
 
 Phanton commerce es un comercio qué funciona como aplicación web. la cual se comunica con la Tpaga API para realizar transacciones con sus productos. La aplicación está concebida como un proyecto Django, conformada por tres aplicaciones: usuarios, pagos y productos. La aplicación de pagos es la que se comunica con la Tpaga API para realizar transacciones sobre una orden creada en específico.
 
+### Modelo de BD
+
+![](ERDDiagram.png)
+
 ###  Tiempo estimado : 4 días 
 
 
@@ -35,11 +39,16 @@ Para revertir una transacción, se deben ingresar con:
  - usuario : manager
  - contraseña : commerce123
 
+ ![](images_doc/login.png)
+
 
  Una vez dentro se despliega la siguiente interfaz
 
+![](images_doc/reverted.png)
 
  En el momento en qué se da clic en revertir, la aplicación envía una solicitud a la Tpaga API. La respuesta de la operación se ve reflejada así:
+
+ ![](images_doc/message.png)
 
 
 ### Endpoint a implementar
