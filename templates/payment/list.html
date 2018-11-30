@@ -40,7 +40,11 @@
                         <td>{{order.status}}</td>
                         <td>{{order.total_amount}}</td>
                         <td>{{order.date_order}}</td>
-                        <td><a href="/voucher/{{order.order_token}}">{{order.order_token}}</a></td>
+                        {% if order.status == "created"%}
+                         <td><a href="/confirm_pay/{{order.order_token}}">{{order.order_token}}</a></td>
+                        {% else %}
+                         <td><a href="/voucher/{{order.order_token}}">{{order.order_token}}</a></td>
+                        {% endif %}
                         {% if request.user.is_staff %}
                         <td>{{order.user.user.username}}</td>
 

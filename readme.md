@@ -37,8 +37,8 @@ Un endopoint para implementar podría ser listar la información de las ordenes 
 Sobre lo positivo de la prueba, personalmente me gusto la presentación de la documentación. El uso del glosario ayuda a entender el contenido de cada solicitud realizada a la API. 
 
 #### Para mejorar
-1. Hubiera sido genial qué cada elemento de la lista de purchase_items tuviera un campo dónde se pueda consgnar la cantidad de cada producto. 
+- Hubiera sido genial qué cada elemento de la lista de purchase_items tuviera un campo dónde se pueda consgnar la cantidad de cada producto. 
 
-2. En la página principal de la documentación, muestran un diagrama con el flujo de la aplicación. El diagrama se llama "Diagrama de comunicación" y permite ver cómo se comunican los componentes del negocio en tiempo de ejecución. Personalmente le daría ese nombre, aunque igualmente cumple con el cometido de su nombre que es explicar el flujo de la aplicación. 
+- En la página principal de la documentación, muestran un diagrama con el flujo de la aplicación. El diagrama se llama "Diagrama de comunicación" y permite ver cómo se comunican los componentes del negocio en tiempo de ejecución. Personalmente le daría ese nombre, aunque igualmente cumple con el cometido de su nombre que es explicar el flujo de la aplicación. 
 
 
