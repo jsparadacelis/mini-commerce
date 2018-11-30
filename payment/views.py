@@ -56,7 +56,7 @@ def pay_products(request):
                         arr_items, 
                         str(secrets.token_hex(6)), 
                         expired_date, 
-                        "engativa", 
+                        "default", 
                         ip_addr
                 )
                 data_order_request = response

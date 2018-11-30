@@ -106,6 +106,14 @@ input, select, textarea {
 	border-radius: 5px;
 	width: 70px;
 }
+.alert-reverted{
+	
+	padding: 20px;
+	background-color: #15e25a;
+	color: white;
+	border-radius:5px;
+
+}
 
 
 /* Basic */
