@@ -51,7 +51,14 @@ def pay_products(request):
                 make_request = Request_api()
                 ip_addr = str(request.META.get("REMOTE_ADDR"))
                 #Make request to TPAGA api
-                response = make_request.make_pay_request(total_amount, arr_items, str(secrets.token_hex(6)), expired_date,  'sede_45', ip_addr)
+                response = make_request.make_pay_request(
+                        total_amount,
+                        arr_items, 
+                        str(secrets.token_hex(6)), 
+                        expired_date, 
+                        request.user.terminal, 
+                        ip_addr
+                )
                 data_order_request = response
 
 
@@ -173,8 +180,7 @@ def confirm_pay(request, order_token):
                 data = {
                         "name" : key,
                         "quantity" : len(l),
-                        "value" : d["value"],
-                        "url" : Product.objects.get(name = key).image.url
+                        "value" : d["value"]
                 }
                 data_list.append(data)
 
