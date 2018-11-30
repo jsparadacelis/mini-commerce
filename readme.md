@@ -29,6 +29,19 @@ Como parte de los modulos que conforman el proyecto, quise implementar la posibi
 
 El despliegue en Heroku fue de las actividades más complicadas, ya qué poca es la experiencia sobre el tema. Anteriormente había hecho un despliegue utilizando heroku, pero este se me hacía más complicado, dado qué en este caso hago uso de archivos estáticos como las plantillas, las hojas de estilos, etc. Además de la subida de archivos y condiguraciones del proyecto, el despliegue también implíca las pruebas que se realicen, por ejemplo, en muchas ocaciones mis vistas retornaban errores propios de Django qué debía solucionar para seguir con las pruebas, lo que implíca solucionar, actualizar el git y agregar los cambios a la rama remota qué gestiona el despliegue en Heroku. En este item, trabajé aproximadamente unas **3 horas** a la espera del tiempo adicional qué invierta en las ultimas pruebas antes de enviar esto. 
 
+### Revertir Transacciones
+
+Para revertir una transacción, se deben ingresar con:
+ - usuario : manager
+ - contraseña : commerce123
+
+
+ Una vez dentro se despliega la siguiente interfaz
+
+
+ En el momento en qué se da clic en revertir, la aplicación envía una solicitud a la Tpaga API. La respuesta de la operación se ve reflejada así:
+
+
 ### Endpoint a implementar
 
 Un endopoint para implementar podría ser listar la información de las ordenes creadas por cada usuario en una ventana de tiempo. A partir de una fecha de inicio y una fecha de fin, mostar los detalles de cada orden, cómo sus productos, su estado y la cantidad de artículos por producto. 

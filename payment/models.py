@@ -3,7 +3,7 @@ from django.db import models
 
 class Order(models.Model):
 
-    terminal_id = models.CharField(max_length=10)
+    terminal_id = models.CharField(max_length=20)
     total_amount = models.FloatField()
     order_token = models.CharField(max_length=20)
     date_order = models.DateField(auto_now=True)
