@@ -213,6 +213,7 @@ def list_trans(request):
                 response = request_status.revert_pay(order.token_response)
                 order.status = response["status"]
                 order.save()
+                print(response)
                 messages.success(request,'transacción revertida')
                 return redirect('list_trans')
         else:
