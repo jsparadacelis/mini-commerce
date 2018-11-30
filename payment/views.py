@@ -223,7 +223,7 @@ def list_trans(request):
                 else:
                         list_order = Order.objects.filter(
                                 user = request.user.client
-                                ).order_by('id')
+                                ).order_by('-date_order','id')
                 
                 #Pagination
                 paginator = Paginator(list_order, 5)
