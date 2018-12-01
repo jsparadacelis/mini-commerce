@@ -28,19 +28,24 @@ class Request_api:
 
         data_request = json.dumps(data_request, ensure_ascii = False)
         url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/create'
-        r = requests.post(url, data = data_request, headers = self.headers)        
-        response = r.json() 
+        try:
+            r = requests.post(url, data = data_request, headers = self.headers) 
+        except requests.exceptions.RequestException as error:
+            raise error
 
+        response = r.json() 
         return response
 
         
     def confirm_pay_status(self, token):
 
         url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/'+token+'/info'
-        r = requests.get(url, headers  = self.headers)
+        try:
+            r = requests.get(url, headers  = self.headers)
+        except requests.exceptions.RequestException as error:
+            raise error
+        
         response = r.json() 
-
-
         return response
     
     def report_delivery(self, token):
@@ -48,9 +53,12 @@ class Request_api:
         url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/confirm_delivery'
         data = { "payment_request_token" : token}
         data_request = json.dumps(data, ensure_ascii = False)
-        r = requests.post(url, data = data_request, headers = self.headers)        
+        try:
+            r = requests.post(url, data = data_request, headers = self.headers)
+        except requests.exceptions.RequestException as error:
+            raise error
+    
         response = r.json()
-
         return response
 
     def revert_pay(self, token):
@@ -58,7 +66,10 @@ class Request_api:
         url = 'https://stag.wallet.tpaga.co/merchants/api/v1/payment_requests/refund'
         data = { "payment_request_token" : token}
         data_request = json.dumps(data, ensure_ascii = False)
-        r = requests.post(url, data = data_request, headers = self.headers)        
-        response = r.json()
+        try:
+            r = requests.post(url, data = data_request, headers = self.headers)        
+        except requests.exceptions.RequestException as error:
+            raise error
 
+        response = r.json()
         return response

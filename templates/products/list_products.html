@@ -12,6 +12,13 @@
 				<h1>Hola! Bienvenido a Phantom Commerce
 					</h1>
 			</header>
+			{% if messages %}
+				{% for message in messages%}
+				<div class="alert alert-danger" role="alert">
+               	 	{{message}}
+            	</div>
+				{% endfor %}
+			{% endif %}
 			<section class="">
 				<form action="{% url 'pay_products' %}" method="POST" id="myform">
 					{% for product in products_list %}

@@ -1,3 +1,4 @@
+#Django utilities
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -5,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+#Local files utilities
 from .models import Client
 from .forms import LoginForm, SignUpForm
 
@@ -30,7 +32,10 @@ def login_view(request):
                 login(request, user)
                 return redirect("list_products")
             else:
-                messages.error(request,'usuario o contraseña incorrecta')
+                messages.error(
+                    request,
+                    'usuario o contraseña incorrecta'
+                )
                 return redirect('login_view')
         else:
             pass

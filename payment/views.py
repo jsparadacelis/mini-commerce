@@ -22,8 +22,8 @@ def pay_products(request):
         
         arr_items = []
         response = {}
-        if request.method == "POST":
-
+        if request.method == "POST" :
+                
                 num_products = int(request.POST["num_products"])
                 data = request.POST
                 total_amount = 0
@@ -41,12 +41,10 @@ def pay_products(request):
                                 total_amount += product["value"]
                                 arr_items.append(product)
                 
-
-                expired_date = add_months(datetime.datetime.now(), 1)
-                
                 make_request = Request_api()
                 ip_addr = str(request.META.get("REMOTE_ADDR"))
-                #Make request to TPAGA api
+                expired_date = add_months(datetime.datetime.now(), 1)
+
                 response = make_request.make_pay_request(
                         total_amount,
                         arr_items, 
@@ -55,6 +53,13 @@ def pay_products(request):
                         "default", 
                         ip_addr
                 )
+                
+                if "error_code" in response:
+                        messages.success(
+                                request,
+                                'No se pudo completar la transacción'
+                        )
+                        return redirect("list_products")
 
                 order = Order.objects.create(
                         terminal_id = response["terminal_id"], 
@@ -130,6 +135,13 @@ def confirm_pay(request, order_token):
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
 
+        if "error_code" in response:
+                        messages.success(
+                                request,
+                                'No se pudo completar la transacción'
+                        )
+                        return redirect("list_products")
+
         if order.status == "created":
                 order.status = response["status"]
                 order.save()
@@ -163,6 +175,12 @@ def confirm_delivery(request, order_token):
 
         request_status = Request_api()
         response = request_status.report_delivery(order.token_response)
+        if "error_code" in response:
+                        messages.success(
+                                request,
+                                'No se pudo completar la transacción'
+                        )
+                        return redirect("list_products")
 
         if order.status == "paid":
                 order.status = response["status"]
@@ -186,9 +204,15 @@ def list_trans(request):
                 
                 request_status = Request_api()
                 response = request_status.revert_pay(order.token_response)
+                if "error_code" in response:
+                        messages.success(
+                                request,
+                                'No se pudo completar la transacción'
+                        )
+                        return redirect("list_trans")
+
                 order.status = response["status"]
                 order.save()
-                print(response)
                 messages.success(request,'transacción revertida')
                 return redirect('list_trans')
         else:
