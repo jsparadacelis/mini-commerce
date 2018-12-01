@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ppb1#h=k-qnw_zwf8&e=r0wfv002m0n0iwqqgtyyu0d9&akiql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -152,7 +152,7 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-LOGGING = {
+''' LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
@@ -167,6 +167,6 @@ LOGGING = {
         },
     },
 }
-
+ '''
 
 

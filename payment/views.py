@@ -17,8 +17,6 @@ from products.models import Product
 from .request_api import Request_api
 from .utilities import add_months, listing_order
 
-
-
 @login_required
 def pay_products(request):
         
@@ -206,7 +204,7 @@ def list_trans(request):
                 
                 #Pagination
                 paginator = Paginator(list_order, 5)
-                page = request.GET.get('page')
+                page = request.GET.get_object_or_404('page')
                 list_order = paginator.get_page(page)
 
         return render(
