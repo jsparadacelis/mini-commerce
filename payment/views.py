@@ -1,24 +1,21 @@
 #Django utilities
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
 
 #Python utilities
 import json, requests, secrets
 import datetime
 import dateutil.parser
-import itertools
-from operator import itemgetter
 
 #Local files utilities
 from .models import Order, Item 
 from products.models import Product
 from .request_api import Request_api
-from .expired_date import add_months
+from .utilities import add_months, listing_order
 
 
 
@@ -26,8 +23,7 @@ from .expired_date import add_months
 def pay_products(request):
         
         arr_items = []
-        pay_link = ""
-        data_order_request = {}
+        response = {}
         if request.method == "POST":
 
                 num_products = int(request.POST["num_products"])
@@ -40,7 +36,9 @@ def pay_products(request):
                         for j in range(num):
                                 product = {
                                         "name" : data["name_product"+str(i + 1)],
-                                        "value" : float(data["value_product"+str(i + 1)])
+                                        "value" : float(
+                                                data["value_product"+str(i + 1)]
+                                        )
                                 }
                                 total_amount += product["value"]
                                 arr_items.append(product)
@@ -59,10 +57,7 @@ def pay_products(request):
                         "default", 
                         ip_addr
                 )
-                data_order_request = response
 
-
-                pay_link = response["tpaga_payment_url"]
                 order = Order.objects.create(
                         terminal_id = response["terminal_id"], 
                         total_amount = float(response["cost"]),
@@ -80,34 +75,20 @@ def pay_products(request):
                                 order = order
                         ) 
         
-
-
-        data_list = []
-
-        #Ordering item's info for render
-        arr_items = sorted(arr_items, key = itemgetter('name'))
-        for key, group in itertools.groupby(arr_items, key = lambda x : x['name']):
-                l = list(group)
-                d = l[0]
-                data = {
-                        "name" : key,
-                        "quantity" : len(l),
-                        "value" : d["value"]
-                }
-                data_list.append(data)
-        
         #Getting expires_at date and formating
         date_order = dateutil.parser.parse(
-                data_order_request['expires_at']
-                ).strftime("%d/%m/%y")
+                response['expires_at']
+        ).strftime("%d/%m/%y")
                 
+        data_list = listing_order(arr_items)
+
         return render(
                 request,
                 'products/pay_products.html',
                 {
                         "data_list" : data_list,
-                        "pay_link" : pay_link,
-                        "data_order": data_order_request,
+                        "pay_link" : response["tpaga_payment_url"],
+                        "data_order": response,
                         "date_order" : date_order
                 } 
         )
@@ -115,7 +96,11 @@ def pay_products(request):
 def voucher(request, order_token):
 
         #getting order from order_token param 
-        order = Order.objects.get(order_token = order_token)
+        try:
+            order = Order.objects.get_object_or_404(order_token = order_token)
+        except Order.DoesNotExist:
+            raise Http404
+        
         #Order's items
         items_list = Item.objects.filter(order = order)
         arr_items = []
@@ -126,22 +111,7 @@ def voucher(request, order_token):
                 }
                 arr_items.append(product)
 
-        data_list = []
-        arr_items = sorted(arr_items, key = itemgetter('name'))
-
-        #Ordering item's info for render
-        for key, group in itertools.groupby(arr_items, key = lambda x : x['name']):
-                l = list(group)
-                d = l[0]
-                data = {
-                        "name" : key,
-                        "quantity" : len(l),
-                        "value" : d["value"],
-                        "url" : Product.objects.get(name = key).image.url
-                }
-                data_list.append(data)
-
-
+        data_list = listing_order(arr_items)
         return render(
                 request,
                 'products/voucher.html',
@@ -154,7 +124,11 @@ def voucher(request, order_token):
 @login_required
 def confirm_pay(request, order_token):
        
-        order = Order.objects.get(order_token = order_token)
+        try:
+            order = Order.objects.get_object_or_404(order_token = order_token)
+        except Order.DoesNotExist:
+            raise Http404
+
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
 
@@ -171,19 +145,7 @@ def confirm_pay(request, order_token):
                 }
                 arr_items.append(product)
 
-        data_list = []
-        arr_items = sorted(arr_items, key = itemgetter('name'))
-
-        for key, group in itertools.groupby(arr_items, key = lambda x : x['name']):
-                l = list(group)
-                d = l[0]
-                data = {
-                        "name" : key,
-                        "quantity" : len(l),
-                        "value" : d["value"]
-                }
-                data_list.append(data)
-
+        data_list = listing_order(arr_items)
         return render(
                 request,
                 'payment/confirm.html',
@@ -196,7 +158,11 @@ def confirm_pay(request, order_token):
 
 @login_required
 def confirm_delivery(request, order_token):
-        order = Order.objects.get(order_token = order_token)
+        try:
+            order = Order.objects.get_object_or_404(order_token = order_token)
+        except Order.DoesNotExist:
+            raise Http404
+
         request_status = Request_api()
         response = request_status.report_delivery(order.token_response)
 
@@ -214,7 +180,12 @@ def list_trans(request):
         list_order = {}
         #Listing transactions for user
         if request.method == 'POST':
-                order = Order.objects.get(id = request.POST["order_id"])
+                order_id = request.POST["order_id"]
+                try:
+                        order = Order.objects.get_object_or_404(id = order_id)
+                except Order.DoesNotExist:
+                        raise Http404
+                
                 request_status = Request_api()
                 response = request_status.revert_pay(order.token_response)
                 order.status = response["status"]
@@ -225,11 +196,13 @@ def list_trans(request):
         else:
                 #Listing transactions for admin (all)
                 if request.user.is_staff:
-                        list_order = Order.objects.all().order_by('id')
+                        list_order = Order.objects.all()
+                        list_order = list_order.order_by('id')
                 else:
                         list_order = Order.objects.filter(
                                 user = request.user.client
-                                ).order_by('-date_order','id')
+                        )
+                        list_order = list_order.order_by('-date_order','id')
                 
                 #Pagination
                 paginator = Paginator(list_order, 5)
