@@ -67,7 +67,7 @@ def pay_products(request):
                         order_token = response["order_id"],
                         status = response["status"],
                         token_response = response["token"],
-                        user = request.user.client
+                        client = request.user.client
                 )
                 order.save()
 
@@ -135,7 +135,7 @@ def confirm_pay(request, order_token):
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
 
-        if "error_code" in response:
+        if "error_code" in respons+e:
                         messages.success(
                                 request,
                                 'No se pudo completar la transacción'
@@ -198,14 +198,14 @@ def list_trans(request):
         if request.method == 'POST':
                 order_id = request.POST["order_id"]
                 try:
-                        order = Order.objects.get_object_or_404(id = order_id)
+                        order = Order.objects.get(id = order_id)
                 except Order.DoesNotExist:
                         raise Http404
                 
                 request_status = Request_api()
                 response = request_status.revert_pay(order.token_response)
                 if "error_code" in response:
-                        messages.success(
+                        messages.error(
                                 request,
                                 'No se pudo completar la transacción'
                         )
@@ -222,13 +222,13 @@ def list_trans(request):
                         list_order = list_order.order_by('id')
                 else:
                         list_order = Order.objects.filter(
-                                user = request.user.client
+                                client = request.user.client
                         )
-                        list_order = list_order.order_by('-date_order','id')
+                        list_order = list_order.order_by('-modified_date','id')
                 
                 #Pagination
                 paginator = Paginator(list_order, 5)
-                page = request.GET.get_object_or_404('page')
+                page = request.GET.get('page')
                 list_order = paginator.get_page(page)
 
         return render(

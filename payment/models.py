@@ -6,10 +6,12 @@ class Order(models.Model):
     terminal_id = models.CharField(max_length=20)
     total_amount = models.FloatField()
     order_token = models.CharField(max_length=20)
-    date_order = models.DateField(auto_now=True)
+    created_date = models.DateField(auto_now_add=True)
+    modified_date = models.DateField(auto_now=True)
     status = models.CharField(max_length=10)
     token_response = models.CharField(max_length=100)
-    user = models.ForeignKey(Client, on_delete=models.CASCADE, default = None)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, default = None)
+
 
 class Item(models.Model):
 

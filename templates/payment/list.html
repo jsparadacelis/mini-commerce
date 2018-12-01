@@ -13,7 +13,7 @@
         {% endif %}
 
         {% for message in messages %}
-        <div class="alert-reverted" role="alert">
+        <div class="alert alert-{{message.tags}}" role="alert">
             {{message}}
         </div>
         {% endfor %}
@@ -26,6 +26,7 @@
                         <th>Status</th>
                         <th>Total</th>
                         <th>Fecha de creación</th>
+                        <th>Ultima Modificación</th>
                         <th>Token de seguridad</th>
                         {% if request.user.is_staff %}
                         <th>Usuario</th>
@@ -39,14 +40,15 @@
                         <td>{{order.id}}</td>
                         <td>{{order.status}}</td>
                         <td>{{order.total_amount}}</td>
-                        <td>{{order.date_order}}</td>
+                        <td>{{order.created_date}}</td>
+                        <td>{{order.modified_date}}</td>
                         {% if order.status == "paid"%}
                         <td><a href="/voucher/{{order.order_token}}">{{order.order_token}}</a></td>
                         {% else %}
                         <td>{{order.order_token}}</a></td>
                         {% endif %}
                         {% if request.user.is_staff %}
-                        <td>{{order.user.user.username}}</td>
+                        <td>{{order.client.user.username}}</td>
 
                         <td>
                             <form action="{% url 'list_trans' %}" method="post">

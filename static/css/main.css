@@ -106,13 +106,26 @@ input, select, textarea {
 	border-radius: 5px;
 	width: 70px;
 }
-.alert-reverted{
-	
+.alert-success{
 	padding: 10px;
-	background-color: #15e25a;
-	color: white;
+	background-color: #6efa62;
+	color: #194b05;
 	border-radius:5px;
+}
 
+.alert-error{
+	padding: 10px;
+	background-color: #f8d7da;
+	color: #721c24;
+	border-radius:5px;
+}
+
+.errorlist li{
+	list-style: none;
+	border-radius: 5px;
+	color: #721c24;
+	background-color: #f8d7da;	
+	border-color: #f5c6cb;
 }
 
 
@@ -2157,8 +2170,8 @@ input, select, textarea {
 	label {
 		display: block;
 		font-size: 0.9em;
-		font-weight: 900;
-		margin: 0 0 1em 0;
+		margin: 0 0 0em 0;
+		text-align: justify
 	}
 
 	input[type="text"],
@@ -2228,7 +2241,7 @@ input, select, textarea {
 	input[type="password"],
 	input[type="email"],
 	select {
-		height: 3em;
+		height: 1.5em;
 	}
 
 	textarea {

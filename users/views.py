@@ -67,6 +67,10 @@ def sign_up(request):
         form_signup = SignUpForm(request.POST)
         if form_signup.is_valid():
             form_signup.save()
+            messages.success(
+                    request,
+                    'usuario creado exitosamente'
+            )
             return redirect("login_view")
 
 

@@ -29,7 +29,7 @@
     <div class="container container-form">
         <div class="col-md-4 login-form">
             {% for message in messages %}
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-{{message.tags}}" role="alert">
                 {{message}}
             </div>
             {% endfor %}
@@ -37,42 +37,14 @@
                 {% csrf_token %}
                 {{form}}
                 <button type="submit" class="button primary">Ingresar</button>
-
             </form>
             <a href="{% url 'sign_up' %}">¿No tienes cuenta? Registrate</a>
-
         </div>
     </div>
     {%else%}
-    
-
-    {% if form.errors %}
-	<!-- Error messaging -->
-	<div id="errors">
-		<div class="inner">
-			<p>There were some errors in the information you entered. Please correct the following:</p>
-			{{ form.non_field_errors }}
-			<ul>
-				{% for field in form %}
-					{% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
-	<!-- /Error messaging -->
-    {% endif %}
-
-
-
-
 
     <div class="container container-form">
         <div class="col-md-4 login-form">
-            {% for message in messages %}
-            <div class="alert alert-danger" role="alert">
-                {{message}}
-            </div>
-            {% endfor %}
             <form action="{% url 'sign_up' %}" method="post">
                 {% csrf_token %}
                 {{form_signup.as_p}}
