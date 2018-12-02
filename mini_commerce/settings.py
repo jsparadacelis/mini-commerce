@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ppb1#h=k-qnw_zwf8&e=r0wfv002m0n0iwqqgtyyu0d9&akiql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'mini_commerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'commerce',
+        'NAME': 'commercedb',
         'USER': 'admin_co',
         'PASSWORD': 'admin123',
         'HOST': 'localhost',

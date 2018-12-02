@@ -11,6 +11,7 @@ class Order(models.Model):
     status = models.CharField(max_length=10)
     token_response = models.CharField(max_length=100)
     client = models.ForeignKey(Client, on_delete=models.CASCADE, default = None)
+    payment_link = models.CharField(max_length=200)
 
 
 class Item(models.Model):

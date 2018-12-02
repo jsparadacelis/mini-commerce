@@ -10,11 +10,9 @@
 	<div id="main">
 		<div class="inner">
 			<h1>Detalle de Compra</h1>
-			<p><b>ID : </b> {{data_order.order_id}}</p>
-			<p><b>Expira en : </b>{{date_order}}</p>
-			<p><b>Comentarios : </b>{{data_order.purchase_description}}</p>
-			<p><b>Estado : </b>{{data_order.status}}</p>
-			<p><b>Total : </b>$ {{data_order.cost}}</p>
+			<p><b>ID : </b> {{order_data.id}}</p>
+			<p><b>Fecha de creación : </b> {{order_data.created_date}}</p>
+			<p><b>Estado : </b>{{order_data.status}}</p>
 			<div class="table-wrapper">
 				<table class="alt">
 					<thead>
@@ -41,7 +39,7 @@
 	</div>
 	<div class="btn-make-pay">
 		<img src="{% static 'images/tpaga_wallet_logo.png' %}" alt="{{data.name}}" style="width: 15%;">
-		<h3><a href="{{pay_link}}">Link de pago</a></h3>
+		<h3><a href="{{order_data.payment_link}}">Link de pago</a></h3>
 	</div>
 
 {% endblock %}

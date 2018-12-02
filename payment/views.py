@@ -5,6 +5,9 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+
 
 #Python utilities
 import json, requests, secrets
@@ -18,7 +21,7 @@ from .request_api import Request_api
 from .utilities import add_months, listing_order
 
 @login_required
-def pay_products(request):
+def make_order(request):
         
         arr_items = []
         response = {}
@@ -55,7 +58,7 @@ def pay_products(request):
                 )
                 
                 if "error_code" in response:
-                        messages.success(
+                        messages.error(
                                 request,
                                 'No se pudo completar la transacción'
                         )
@@ -67,7 +70,8 @@ def pay_products(request):
                         order_token = response["order_id"],
                         status = response["status"],
                         token_response = response["token"],
-                        client = request.user.client
+                        client = request.user.client,
+                        payment_link = response["tpaga_payment_url"]
                 )
                 order.save()
 
@@ -77,70 +81,28 @@ def pay_products(request):
                                 value = item["value"],
                                 order = order
                         ) 
-        
-        #Getting expires_at date and formating
-        date_order = dateutil.parser.parse(
-                response['expires_at']
-        ).strftime("%d/%m/%y")
                 
-        data_list = listing_order(arr_items)
+                return redirect('/pay_products/'+str(order.id))
 
-        return render(
-                request,
-                'products/pay_products.html',
-                {
-                        "data_list" : data_list,
-                        "pay_link" : response["tpaga_payment_url"],
-                        "data_order": response,
-                        "date_order" : date_order
-                } 
-        )
 
-def voucher(request, order_token):
+class confirm_pay(DetailView):
 
-        #getting order from order_token param 
+    template_name = "payment/confirm.html"
+    def get(self, request, order_token):
         try:
-            order = Order.objects.get_object_or_404(order_token = order_token)
+                order = Order.objects.get(order_token = order_token)
         except Order.DoesNotExist:
-            raise Http404
+                raise Http404
         
-        #Order's items
-        items_list = Item.objects.filter(order = order)
-        arr_items = []
-        for item in items_list:
-                product = {
-                        "name" : item.name,
-                        "value" : item.value
-                }
-                arr_items.append(product)
-
-        data_list = listing_order(arr_items)
-        return render(
-                request,
-                'products/voucher.html',
-                {
-                        "order":order,
-                        "data_list":data_list
-                }
-        )
-
-@login_required
-def confirm_pay(request, order_token):
-       
-        try:
-            order = Order.objects.get_object_or_404(order_token = order_token)
-        except Order.DoesNotExist:
-            raise Http404
-
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
 
-        if "error_code" in respons+e:
-                        messages.success(
-                                request,
-                                'No se pudo completar la transacción'
-                        )
-                        return redirect("list_products")
+        if "error_code" in response:
+                messages.error(
+                        request,
+                        'No se pudo completar la transacción'
+                )
+                return redirect("list_products")
 
         if order.status == "created":
                 order.status = response["status"]
@@ -158,18 +120,18 @@ def confirm_pay(request, order_token):
         data_list = listing_order(arr_items)
         return render(
                 request,
-                'payment/confirm.html',
+                self.template_name,
                 {
-                        "data_list" : data_list,
-                        "order_data" : order,
-                        "response" : response
+                        'order_data': order,
+                        'data_list' : data_list
                 }
         )
+
 
 @login_required
 def confirm_delivery(request, order_token):
         try:
-            order = Order.objects.get_object_or_404(order_token = order_token)
+            order = Order.objects.get(order_token = order_token)
         except Order.DoesNotExist:
             raise Http404
 
@@ -190,11 +152,35 @@ def confirm_delivery(request, order_token):
         return redirect(url)
 
 
+class list_trans(ListView):
+        
+        template_name = "payment/list.html"
+        def get(self, request):
+                if request.user.is_staff:
+                        list_order = Order.objects.all()
+                        list_order = list_order.order_by('id')
+                else:
+                        list_order = Order.objects.filter(
+                                client = request.user.client
+                        )
+                        list_order = list_order.order_by('-modified_date','id')
+                
+                #Pagination
+                paginator = Paginator(list_order, 5)
+                page = request.GET.get('page')
+                list_order = paginator.get_page(page)
+                
+                return render(
+                        request,
+                        self.template_name,
+                        {
+                                "list_order" : list_order
+                        }
+                )
+
 @login_required
-def list_trans(request):
+def revert_order(request):
       
-        list_order = {}
-        #Listing transactions for user
         if request.method == 'POST':
                 order_id = request.POST["order_id"]
                 try:
@@ -215,28 +201,32 @@ def list_trans(request):
                 order.save()
                 messages.success(request,'transacción revertida')
                 return redirect('list_trans')
-        else:
-                #Listing transactions for admin (all)
-                if request.user.is_staff:
-                        list_order = Order.objects.all()
-                        list_order = list_order.order_by('id')
-                else:
-                        list_order = Order.objects.filter(
-                                client = request.user.client
-                        )
-                        list_order = list_order.order_by('-modified_date','id')
-                
-                #Pagination
-                paginator = Paginator(list_order, 5)
-                page = request.GET.get('page')
-                list_order = paginator.get_page(page)
 
+
+class pay_products(DetailView):
+    template_name = "products/pay_products.html"
+    def get(self, request, pk):
+        try:
+                order = Order.objects.get(pk = pk)
+        except Order.DoesNotExist:
+                raise Http404
+
+        items_list = Item.objects.filter(order = order)
+        arr_items = []
+        for item in items_list:
+                product = {
+                        "name" : item.name,
+                        "value" : item.value
+                }
+                arr_items.append(product)
+
+        data_list = listing_order(arr_items)
         return render(
                 request,
-                'payment/list.html',
+                self.template_name,
                 {
-                        "list_order" : list_order
+                        'order_data': order,
+                        'data_list' : data_list
                 }
-        )  
-        
-        
+        )
+

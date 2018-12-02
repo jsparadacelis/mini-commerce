@@ -20,7 +20,7 @@
 				{% endfor %}
 			{% endif %}
 			<section class="">
-				<form action="{% url 'pay_products' %}" method="POST" id="myform">
+				<form action="{% url 'make_order' %}" method="POST" id="myform">
 					{% for product in products_list %}
 					<article class="list-products">
 						<span class="image">

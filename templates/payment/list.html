@@ -5,6 +5,7 @@
 {% load static %}
 
 {% if list_order %}
+
 <div class="pagination">
     <span class="step-links">
         {% if list_order.has_previous %}
@@ -43,15 +44,17 @@
                         <td>{{order.created_date}}</td>
                         <td>{{order.modified_date}}</td>
                         {% if order.status == "paid"%}
-                        <td><a href="/voucher/{{order.order_token}}">{{order.order_token}}</a></td>
+                        <td><a href="{% url 'confirm_pay' order.order_token %}">{{order.order_token}}</a></td>
+                        {% elif order.status == "created" %} 
+                        <td><a href="{% url 'pay_products' order.id %}">{{order.order_token}}</a></td>
                         {% else %}
-                        <td>{{order.order_token}}</a></td>
+                        <td>{{order.order_token}}</td>
                         {% endif %}
                         {% if request.user.is_staff %}
                         <td>{{order.client.user.username}}</td>
 
                         <td>
-                            <form action="{% url 'list_trans' %}" method="post">
+                            <form action="{% url 'revert_order' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" value="{{order.id}}" name="order_id">
                                 <button type="submit" class="button primary">revertir</button>
