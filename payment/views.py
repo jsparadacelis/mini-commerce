@@ -96,7 +96,7 @@ class confirm_pay(DetailView):
 
     def get(self, request, order_token, format=None):
         
-        order = self.get_object(order_token):
+        order = self.get_object(order_token)
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
 
