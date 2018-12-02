@@ -88,12 +88,15 @@ def make_order(request):
 class confirm_pay(DetailView):
 
     template_name = "payment/confirm.html"
-    def get(self, request, order_token):
+    def get_object(self, pk):
         try:
-                order = Order.objects.get(order_token = order_token)
+                return Order.objects.get(order_token = order_token)
         except Order.DoesNotExist:
                 raise Http404
+
+    def get(self, request, order_token, format=None):
         
+        order = self.get_object(order_token):
         request_status = Request_api()
         response = request_status.confirm_pay_status(order.token_response)
 
