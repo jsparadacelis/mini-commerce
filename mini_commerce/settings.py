@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'mini_commerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'commercedb',
+        'NAME': 'db_commerce',
         'USER': 'admin_co',
         'PASSWORD': 'admin123',
         'HOST': 'localhost',
