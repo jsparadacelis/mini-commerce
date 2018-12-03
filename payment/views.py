@@ -88,10 +88,9 @@ def make_order(request):
 class confirm_pay(DetailView):
 
     template_name = "payment/confirm.html"
-
-    def get(self, request, pk):
+    def get(self, request, order_token):
         try:
-                order = Order.objects.get(pk = pk)
+                order = Order.objects.get(order_token = order_token)
         except Order.DoesNotExist:
                 raise Http404
         
@@ -154,6 +153,7 @@ def confirm_delivery(request, order_token):
 
 
 class list_trans(ListView):
+        
         template_name = "payment/list.html"
         def get(self, request):
                 if request.user.is_staff:
