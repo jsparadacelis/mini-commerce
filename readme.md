@@ -12,14 +12,14 @@ Phanton commerce es un comercio qué funciona como aplicación web. la cual se c
 
 ###  Operaciones y tiempo invertido 
 
-1) Creación de módulos - **8h** 
+1) Creación de módulos - **10h** 
 2) Escribiendo las vistas por cada paso de la transacción - **8h - 10h**
 3) Implementando un pequeño sistema de registro y autenticación **3h - 4h**
 4) Realizando pruebas en Heroku D: - **3h**
 
 #### Creación de Modulos
 
-El proyecto está concebido como un proyeto de Django. El proyecto está conformado por tres aplicaciónes: usuarios, pagos y productos. El modulo de pagos se comunica con la API de Tpaga para realizar las operaciones que tienen que ver con la creación, modificación y eliminación de ordenes generadas por los usuarios de la aplicación web. Realmente, la implementación de los modulos me llevó aproximadamente unas **8 horas** sumando todos los instantes en los que trabajé en ellos. Podría decirse que esta parte de la implementación, la desarrollé a manera incremental a medida que se me iban ocurriendo cosas,cómo poder registrar usuarios y qué cada usuario tuviera varias ordenes asociadas a el mismo. Cambios cómo ese también significan cambios en el modelo de la Base de Datos de la aplicación. 
+El proyecto está concebido como un proyeto de Django. El proyecto está conformado por tres aplicaciónes: usuarios, pagos y productos. El modulo de pagos se comunica con la API de Tpaga para realizar las operaciones que tienen que ver con la creación, modificación y eliminación de ordenes generadas por los usuarios de la aplicación web. Realmente, la implementación de los modulos me llevó aproximadamente unas **10 horas** sumando todos los instantes en los que trabajé en ellos. Podría decirse que esta parte de la implementación, la desarrollé a manera incremental a medida que se me iban ocurriendo cosas,cómo poder registrar usuarios y qué cada usuario tuviera varias ordenes asociadas a el mismo. Cambios cómo ese también significan cambios en el modelo de la Base de Datos de la aplicación. 
 
 #### Escribiendo las vistas
 
@@ -78,9 +78,12 @@ En el tema de buenas prácticas, algo que intento aplicar siempre es hacer códi
 
 Herramienta para alojar aplicaciones, sólo conozco Heroku. Existen otras cómo AWS, Digital Ocean. Existe otra herramienta quéno he visto muy referenciada qué se llama [D2C](https://d2c.io/). Permite conectarse con AWS, Google cloud, digital ocean. Para realizar despliegues  y pruebas locales a partir de repositorios, recomiendo docker. Se consigue muy buena documentación en internet. Dentro de su hub de aplicaciones se consiguen muchas herraminetas qué hacen sencillo el poder ejecutar aplicaciones de otros en nuestras máquinas. 
 
+Una página qué recomiendo para el trabajo con vistas basadas en clases es [Classy Class-Based views](https://ccbv.co.uk/). Tienen información referente a las clases de las que heredan las vistas basadas en clases en django. Muy buena documentación. 
+
 #### Para realizar pruebas con Docker,ejecutar los siguientes comandos :
 1. git clone https://github.com/jsparadacelis/mini-commerce.git
 2. cd mini-commerce
 3. sudo docker-compose up
 4. Entrar a http://127.0.0.1:8000/ desde el navegador
+
 ¡ Y listo !
