@@ -208,7 +208,7 @@ class pay_products(LoginRequiredMixin, DetailView):
         try:
                 order = Order.objects.get(pk = pk)
         except Order.DoesNotExist:
-                raise Http404,
+                raise Http404
 
         items_list = Item.objects.filter(order = order)
         arr_items = []
