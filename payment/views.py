@@ -87,10 +87,9 @@ def make_order(request):
 
 class confirm_pay(DetailView):
         template_name = "payment/confirm.html"
-        slug_url_kwarg = 'order_token'
-        def get(self, request):
+        def get(self, request, order_token):
                 try:
-                        order = Order.objects.get(order_token = self.slug_url_kwarg)
+                        order = Order.objects.get(order_token = order_token)
                 except Order.DoesNotExist:
                         raise Http404
                 
