@@ -19,37 +19,42 @@
             	</div>
 				{% endfor %}
 			{% endif %}
-			<section class="">
-				<form action="{% url 'make_order' %}" method="POST" id="myform">
-					{% for product in products_list %}
-					<article class="list-products">
-						<span class="image">
-							<img src="{{product.image.url}}" alt="" />
-						</span>
-						<span>
-							<h2>{{product.name}}</h2>
-							<h3>${{product.value}}</h3>
-							<div class="content">
-								<p>Cantidad: </p>
-							</div>
+			    <div class="container">
+        
+        <div class="container-form">
+            <form action="{% url 'make_order' %}" method="POST" id="myform">
+                {% for product in products_list %}
+                <div class="list-products">
+                    <div class="img-product">
+                        <img src="{{product.image.url}}" alt="">
+                    </div>
+                    <div class="detail-products">
+                        <span>
+                            <h2>{{product.name}}</h2>
+                            <h3>${{product.value}}</h3>
+                            <div class="content">
+                                <p>Cantidad: </p>
+                            </div>
 
-							{% csrf_token %}
-							<input type="hidden" name="name_product{{product.id}}" value="{{product.name}}">
-							<input type="hidden" name="value_product{{product.id}}" value="{{product.value}}">
-							<input type="number" name="cant_product{{product.id}}" min="0" max="100" step="1" value="0" required>
-						</span>
+                            {% csrf_token %}
+                            <input type="hidden" name="name_product{{product.id}}" value="{{product.name}}">
+                            <input type="hidden" name="value_product{{product.id}}" value="{{product.value}}">
+                            <input type="number" name="cant_product{{product.id}}" min="0" max="100" step="1" value="0"
+                                required>
+                        </span>
 
+                    </div>
+                </div>
 
-					</article>
-					{% endfor %}
-					<div class="btn-send-request">
-						<input type="hidden" name="num_products" value="{{cant_products}}">
-						<button class="button primary" form="myform">Comprar</button>
-					</div>
+                {% endfor %}
+                <div class="btn-send-request">
+                    <input type="hidden" name="num_products" value="{{cant_products}}">
+                    <button class="button primary" form="myform">Comprar</button>
+                </div>
 
-				</form>
-
-			</section>
+            </form>
+        </div>
+    </div>
 
 
 
