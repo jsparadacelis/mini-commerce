@@ -88,44 +88,44 @@ def make_order(request):
 class confirm_pay(DetailView):
         template_name = "payment/confirm.html"
         slug_url_kwarg = 'slug'
-    def get(self, request):
-        try:
-                order = Order.objects.get(order_token = self.slug_url_kwarg)
-        except Order.DoesNotExist:
-                raise Http404
-        
-        request_status = Request_api()
-        response = request_status.confirm_pay_status(order.token_response)
+        def get(self, request):
+                try:
+                        order = Order.objects.get(order_token = self.slug_url_kwarg)
+                except Order.DoesNotExist:
+                        raise Http404
+                
+                request_status = Request_api()
+                response = request_status.confirm_pay_status(order.token_response)
 
-        if "error_code" in response:
-                messages.error(
+                if "error_code" in response:
+                        messages.error(
+                                request,
+                                'No se pudo completar la transacción'
+                        )
+                        return redirect("list_products")
+
+                if order.status == "created":
+                        order.status = response["status"]
+                        order.save()
+
+                items_list = Item.objects.filter(order = order)
+                arr_items = []
+                for item in items_list:
+                        product = {
+                                "name" : item.name,
+                                "value" : item.value
+                        }
+                        arr_items.append(product)
+
+                data_list = listing_order(arr_items)
+                return render(
                         request,
-                        'No se pudo completar la transacción'
+                        self.template_name,
+                        {
+                                'order_data': order,
+                                'data_list' : data_list
+                        }
                 )
-                return redirect("list_products")
-
-        if order.status == "created":
-                order.status = response["status"]
-                order.save()
-
-        items_list = Item.objects.filter(order = order)
-        arr_items = []
-        for item in items_list:
-                product = {
-                        "name" : item.name,
-                        "value" : item.value
-                }
-                arr_items.append(product)
-
-        data_list = listing_order(arr_items)
-        return render(
-                request,
-                self.template_name,
-                {
-                        'order_data': order,
-                        'data_list' : data_list
-                }
-        )
 
 
 @login_required
