@@ -13,7 +13,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("list_products/", list_products, name="list_products"),
     path("make_order/", make_order, name="make_order"),
-    path("confirm_pay/<str:order_token>", confirm_pay, name="confirm_pay"),
+    path("confirm_pay/<slug:order_token>", confirm_pay, name="confirm_pay"),
     path("list_trans/", list_trans.as_view(), name="list_trans"),
     path("confirm_delivery/<str:order_token>", confirm_delivery, name="confirm_delivery"),
     path("", login_view, name="login_view"),
