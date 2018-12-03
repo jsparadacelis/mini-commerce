@@ -87,7 +87,7 @@ def make_order(request):
 
 class confirm_pay(DetailView):
         template_name = "payment/confirm.html"
-        slug_url_kwarg = 'slug'
+        slug_url_kwarg = 'order_token'
         def get(self, request):
                 try:
                         order = Order.objects.get(order_token = self.slug_url_kwarg)
