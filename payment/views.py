@@ -1,9 +1,9 @@
 #Django utilities
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -85,7 +85,7 @@ def make_order(request):
                 return redirect('/pay_products/'+str(order.id))
 
 
-class confirm_pay(DetailView):
+class confirm_pay(LoginRequiredMixin, DetailView):
         template_name = "payment/confirm.html"
         def get(self, request, order_token):
                 try:
@@ -151,7 +151,7 @@ def confirm_delivery(request, order_token):
         return redirect(url)
 
 
-class list_trans(ListView):
+class list_trans(LoginRequiredMixin, ListView):
         
         template_name = "payment/list.html"
         def get(self, request):
@@ -202,13 +202,13 @@ def revert_order(request):
                 return redirect('list_trans')
 
 
-class pay_products(DetailView):
+class pay_products(LoginRequiredMixin, DetailView):
     template_name = "products/pay_products.html"
     def get(self, request, pk):
         try:
                 order = Order.objects.get(pk = pk)
         except Order.DoesNotExist:
-                raise Http404
+                raise Http404,
 
         items_list = Item.objects.filter(order = order)
         arr_items = []
