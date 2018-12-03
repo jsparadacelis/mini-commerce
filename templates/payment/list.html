@@ -43,9 +43,9 @@
                         <td>{{order.total_amount}}</td>
                         <td>{{order.created_date}}</td>
                         <td>{{order.modified_date}}</td>
-                        {% if order.status == "paid"%}
+                        {% if order.status == "paid" and not request.user.is_staff %}
                         <td><a href="{% url 'confirm_pay' order.order_token %}">{{order.order_token}}</a></td>
-                        {% elif order.status == "created" %} 
+                        {% elif order.status == "created" and not request.user.is_staff %} 
                         <td><a href="{% url 'pay_products' order.id %}">{{order.order_token}}</a></td>
                         {% else %}
                         <td>{{order.order_token}}</td>
