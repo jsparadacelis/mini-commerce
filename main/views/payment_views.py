@@ -15,10 +15,10 @@ import datetime
 import dateutil.parser
 
 #Local files utilities
-from .models import Order, Item 
-from products.models import Product
-from .request_api import Request_api
-from .utilities import add_months, listing_order
+from ..models import Order, Item 
+from ..models import Product
+from ..request_api import Request_api
+from ..utilities import add_months, listing_order
 
 @login_required
 def make_order(request):

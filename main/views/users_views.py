@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 #Local files utilities
-from .models import Client
-from .forms import LoginForm, SignUpForm
+from ..models import Client
+from ..forms import LoginForm, SignUpForm
 
 
 def login_view(request):

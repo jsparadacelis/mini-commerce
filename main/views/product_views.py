@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 #Local files utilities
-from .models import Product
+from ..models import Product
 
 @login_required
 def list_products(request):
